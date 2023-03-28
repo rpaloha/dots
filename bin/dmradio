@@ -1,0 +1,78 @@
+#!/bin/bash
+# script requires dmenu, dunst, and mpv
+
+# radio station list
+menu (){
+    printf "1. Antyradio\n"
+    printf "2. Metal Only\n"
+    printf "3. SomaFM Metal Detector\n"
+    printf "4. Radio Metal\n"
+    printf "5. Bandit Metal\n"
+    printf "6. Northern Metal Radio\n"
+   
+}
+
+start-radio() {
+    dunstify "staring dmradio" "喇 playing station: $1  "
+}
+
+stop-radio(){
+    dunstify " stopping dmradio"
+}
+
+choice=$(menu | dmenu -l 10 -p "Choose Radio Station:" | cut -d"." -f1) || exit
+
+case $choice in
+    "quit")
+        stop-radio;
+        pkill -f http
+        exit
+        ;;
+
+    1)
+        pkill -f http || echo "mpv not running"
+        start-radio 'Antyradio' ;
+        mpv "https://n-4-2.dcs.redcdn.pl/sc/o2/Eurozet/live/antyradio.livx?audio=5"
+        return
+        ;;
+
+    2)
+        pkill -f http || echo "mpv not running"
+        start-radio 'Metal Only' ;
+        mpv "http://server1.blitz-stream.de:4400/"
+        return
+        ;;
+
+    3)
+        pkill -f http || echo "mpv not running"
+        start-radio 'SomaFM Metal Detector' ;
+        mpv "https://somafm.com/metal130.pls"
+        return
+        ;;
+
+    4)
+        pkill -f http || echo "mpv not running"
+        start-radio 'Radio Metal' ;
+        mpv "http://radio.radiometal.com/radiometal.mp3.m3u"
+        return
+        ;;
+    5)
+        pkill -f http || echo "mpv not running"
+        start-radio 'Bandit Metal' ;
+        mpv "http://wr03-ice.stream.khz.se/wr03_mp3"
+        return
+        ;;
+    6)
+        pkill -f http || echo "mpv not running"
+        start-radio 'Northern Metal Radio' ;
+        mpv "https://s3.free-shoutcast.com/stream/18578"
+        return
+        ;;
+   
+    *)
+        stop-radio;
+        pkill -f http || echo "mpv not running"
+        dunstify "  program stopped" && exit 0
+        ;;
+esac
+

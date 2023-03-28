@@ -1,0 +1,28 @@
+#!/bin/sh
+(dmenu -i | (read sel;
+OUTDIR=~/Pictures/screenshots
+MAIM=maim
+SCREENSHOT=$OUTDIR/$(date +%F-%T).png
+case "${sel%.*}" in
+	1)
+		# whole screen capture
+		$MAIM $SCREENSHOT
+		;;
+	2)
+		# select region to capture
+		$MAIM -s $SCREENSHOT
+		;;
+	3)
+		# capture active window
+		$MAIM -i $(xdotool getactivewindow) $SCREENSHOT
+		;;
+	*)
+		return
+		;;
+	esac
+	echo $SCREENSHOT
+)) <<end
+1. Whole screen
+2. Select region
+3. Active window
+end
